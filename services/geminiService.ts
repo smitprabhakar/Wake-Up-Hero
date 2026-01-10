@@ -18,6 +18,58 @@ export const getMotivationalMessage = async (missionType: string) => {
   }
 };
 
+export const verifySmile = async (base64Image: string): Promise<boolean> => {
+  try {
+    // Corrected contents to use the required parts structure for multi-part requests as per guidelines
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: {
+        parts: [
+          {
+            inlineData: {
+              mimeType: "image/jpeg",
+              data: base64Image
+            }
+          },
+          {
+            text: "Is the person in this photo clearly smiling? Answer only with 'YES' or 'NO'."
+          }
+        ]
+      }
+    });
+    return response.text?.toUpperCase().includes('YES') || false;
+  } catch (error) {
+    console.error("Verification Error:", error);
+    return false;
+  }
+};
+
+export const verifyPushupPosition = async (base64Image: string): Promise<boolean> => {
+  try {
+    // Corrected contents to use the required parts structure for multi-part requests as per guidelines
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: {
+        parts: [
+          {
+            inlineData: {
+              mimeType: "image/jpeg",
+              data: base64Image
+            }
+          },
+          {
+            text: "Is the person in this photo performing a push-up and currently at the BOTTOM of the movement (chest near the floor)? Answer only with 'YES' or 'NO'."
+          }
+        ]
+      }
+    });
+    return response.text?.toUpperCase().includes('YES') || false;
+  } catch (error) {
+    console.error("Pushup Verification Error:", error);
+    return false;
+  }
+};
+
 export const getWakeUpCallAudio = async () => {
   try {
     const prompt = `SHOUT AT THE USER: WAKE UP HERO! THE SUN IS UP! THE GRIND NEVER STOPS! GET OUT OF BED RIGHT NOW AND CRUSH YOUR MISSIONS! SUCCESS DOES NOT WAIT FOR SLEEPYHEADS! MOVE MOVE MOVE!`;
@@ -29,14 +81,14 @@ export const getWakeUpCallAudio = async () => {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Fenrir' }, // Fenrir is often a deeper, more aggressive voice
+            prebuiltVoiceConfig: { voiceName: 'Fenrir' }, 
           },
         },
       },
     });
 
     const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-    return base64Audio;
+    return base64Audio; // This is raw PCM base64
   } catch (error) {
     console.error("TTS Error:", error);
     return null;

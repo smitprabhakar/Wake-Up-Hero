@@ -6,7 +6,14 @@ export enum MissionType {
   SQUATS = 'squats',
   SHAKE = 'shake',
   MEMORY = 'memory',
-  MORSE = 'morse'
+  MORSE = 'morse',
+  SMILE = 'smile',
+  PUSHUPS = 'pushups'
+}
+
+export interface MissionConfig {
+  type: MissionType;
+  count: number;
 }
 
 export interface Alarm {
@@ -14,8 +21,7 @@ export interface Alarm {
   time: string; // HH:mm format
   days: number[]; // 0-6 (Sun-Sat)
   enabled: boolean;
-  missionType: MissionType;
-  missionCount: number;
+  missions: MissionConfig[];
   label: string;
   isHardcore: boolean; // Cannot snooze, cannot delete when ringing
   snoozeCount: number;
@@ -27,9 +33,8 @@ export interface Alarm {
 export interface MissionState {
   isActive: boolean;
   alarmId: string;
-  type: MissionType;
-  targetCount: number;
-  currentCount: number;
+  missions: MissionConfig[];
+  currentMissionIndex: number;
   isHardcore: boolean;
   soundUrl: string;
   gradualVolumeDuration: number;
