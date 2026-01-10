@@ -1,0 +1,8 @@
+{
+  "name": "WakeUp Hero",
+  "description": "A high-intensity alarm clock app with mandatory physical and mental missions to ensure you never hit snooze again.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
